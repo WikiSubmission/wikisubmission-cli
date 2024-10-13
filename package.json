@@ -1,0 +1,23 @@
+{
+  "name": "wikisubmission-cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "bin": {
+    "wikisubmission-cli": "./bin/index.js"
+  },
+  "scripts": {
+    "start": "node ./bin/index.js"
+  },
+  "keywords": [
+    "wikisubmission",
+    "wikisubmission-cli"
+  ],
+  "author": "WikiSubmission Developers",
+  "license": "ISC",
+  "description": "WikiSubmission Command Line Interface (CLI) Tool",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "node-color-log": "^12.0.1",
+    "update-notifier": "^7.3.1"
+  }
+}
