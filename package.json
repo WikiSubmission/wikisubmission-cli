@@ -1,6 +1,6 @@
 {
   "name": "wikisubmission-cli",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "main": "index.js",
   "bin": {
     "wikisubmission-cli": "./bin/index.js"
