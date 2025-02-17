@@ -3,7 +3,8 @@
   "version": "1.0.3",
   "main": "index.js",
   "bin": {
-    "wikisubmission-cli": "./bin/index.js"
+    "ws": "./bin/index.js",
+    "wikisubmission": "./bin/index.js"
   },
   "scripts": {
     "start": "node ./bin/index.js"
