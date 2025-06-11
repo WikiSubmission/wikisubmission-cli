@@ -1,4 +1,3 @@
-const packageJson = require("./package.json");
 const logger = require("node-color-log");
 
 exports.baseLog = function () {
@@ -34,26 +33,3 @@ exports.formatMarkdown = (text, mode = "default") => {
     })
     .replace(/^/, defaultColor);
 };
-
-// const currentVersion = packageJson.version;
-
-exports.checkUpdateAvailable = async function () {
-
-};
-
-//   const latestVersionAvailable = await latestVersion("node-fetch");
-
-//   if (latestVersionAvailable === null) {
-//     return;
-//   }
-
-//   if (latestVersionAvailable !== currentVersion) {
-//     logger
-//       .dim()
-//       .color("green")
-//       .log(
-//         `\nNote: A new version (${
-//           latestVersionAvailable || "--"
-//         }) of wikisubmission-cli is available. You are using version ${currentVersion}. Learn more: https://github.com/wikisubmission/wikisubmission-cli\n`
-//       );
-//   }

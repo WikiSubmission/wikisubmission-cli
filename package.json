@@ -1,6 +1,6 @@
 {
   "name": "wikisubmission-cli",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "index.js",
   "bin": {
     "ws": "./bin/index.js",
@@ -14,7 +14,7 @@
     "wikisubmission-cli"
   ],
   "author": "WikiSubmission Developers",
-  "license": "ISC",
+  "license": "MIT",
   "description": "WikiSubmission Command Line Interface (CLI) Tool",
   "dependencies": {
     "commander": "^12.1.0",

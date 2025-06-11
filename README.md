@@ -75,3 +75,11 @@ Query newsletter references from the Submitters Perspectives. The command prefix
 Optional parameters:
 
 * Strict search (ensure identical word order): `-s` or `--strict`
+
+### Library
+
+Query links to popular Submission resources. The command prefix is `l` or `library`. Examples:
+
+* `ws l quran-the-final-testament`
+* `ws l appendix-2`
+* `ws l visual-presentation`
