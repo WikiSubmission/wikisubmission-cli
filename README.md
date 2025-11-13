@@ -8,7 +8,7 @@ Ensure [Node.js](https://nodejs.org/en/download/prebuilt-installer) is installed
 
 Run the following command in your terminal / command prompt to install the CLI:
 
-```
+```zsh
 npm install wikisubmission-cli -g
 ```
 
@@ -36,7 +36,6 @@ Optional parameters:
 * Include Arabic-to-English transliteration: `-tr` or `--transliteration`
 * Do not include subtitles or footnotes: `-nc` or `--nocommentary`
 * Strict search (ensure identical word order): `-s` or `--strict`
-* Normalize 'God' casing: `-ngc` or `--normalizegodcapitalization`
 
 ### Prayer Times
 
@@ -75,11 +74,3 @@ Query newsletter references from the Submitters Perspectives. The command prefix
 Optional parameters:
 
 * Strict search (ensure identical word order): `-s` or `--strict`
-
-### Library
-
-Query links to popular Submission resources. The command prefix is `l` or `library`. Examples:
-
-* `ws l quran-the-final-testament`
-* `ws l appendix-2`
-* `ws l visual-presentation`

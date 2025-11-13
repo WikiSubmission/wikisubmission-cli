@@ -1,6 +1,7 @@
 const { Command } = require("commander");
 const logger = require("node-color-log");
 const { baseLog, formatMarkdown } = require("./utils");
+const { default: WikiSubmission } = require("wikisubmission-sdk");
 
 exports.default = new Command()
   .name("m")
@@ -16,46 +17,47 @@ exports.default = new Command()
 
     let { strict, extent } = options;
 
-    const fetchURL = new URL(
-      `https://api.wikisubmission.org/moc/media/search`
-    );
-    fetchURL.searchParams.append("q", query);
-    fetchURL.searchParams.append("highlight", "true");
-    if (strict === false) fetchURL.searchParams.append("iwo", "true");
-    if (extent !== "all") fetchURL.searchParams.append("extent", extent);
+    const ws = WikiSubmission.createClient();
 
-    const request = await fetch(fetchURL);
-    const response = await request.json();
+    const results = await ws.Media.query(query, {
+      highlight: true,
+      strategy: strict ? "strict" : "default",
+      extent: extent !== "all" ? extent : undefined,
+    });
 
-    if (response.results?.length > 0 && !response.error) {
-      logger
-        .color("green")
-        .bold()
-        .underscore()
-        .log(
-          `${response.results.length} result${
-            response.results.length > 1 ? "s" : ""
-          } for "${query}"\n`
-        );
+    if (results.data && results.data.length > 0) {
+      if (results.type === "search" && results.totalMatches) {
+        logger
+          .color("green")
+          .bold()
+          .underscore()
+          .log(
+            `${results.metadata.formattedQuery} (${results.totalMatches} result${results.totalMatches > 1 ? "s" : ""})\n`
+          );
+      } else {
+        logger
+          .color("green")
+          .bold()
+          .underscore()
+          .log(
+            `${results.data.length} result${results.data.length > 1 ? "s" : ""
+            } for "${query}"\n`
+          );
+      }
 
-      for (const media of response.results) {
+      for (const media of results.data) {
         logger
           .color("magenta")
           .log(
             `${
-              media.media_markdown.split("]")[0].split("[")[1]
-            } - https://youtu.be/${media.media_youtube_id}?t=${
-              media.media_youtube_timestamp
+              media.markdown?.split("]")[0]?.split("[")[1] || media.title || ""
+            } - https://youtu.be/${media.youtube_id}?t=${
+              media.youtube_timestamp
             }`
           );
-        logger.log(formatMarkdown(`"${media.media_transcript}"` + "\n"));
+        logger.log(formatMarkdown(`"${media.transcript}"` + "\n"));
       }
-    } else if (!response.error) {
-      logger.color("yellow").bold().underscore().log(`No results\n`);
-    } else if (response.error?.name) {
-      logger.color("red").bold().underscore().log(`${response.error.name}\n`);
-      logger.color("red").log(`${response.error.description || "--"}\n`);
     } else {
-      logger.color("red").bold().log(`Invalid request\n`);
+      logger.color("yellow").bold().underscore().log(`No results\n`);
     }
   });

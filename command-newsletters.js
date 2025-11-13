@@ -1,6 +1,7 @@
 const { Command } = require("commander");
 const logger = require("node-color-log");
 const { baseLog, formatMarkdown } = require("./utils");
+const { default: WikiSubmission } = require("wikisubmission-sdk");
 
 exports.default = new Command()
   .name("newsletters")
@@ -15,51 +16,49 @@ exports.default = new Command()
 
     let { strict } = options;
 
-    const fetchURL = new URL(
-      `https://api.wikisubmission.org/moc/newsletters/search`
-    );
-    fetchURL.searchParams.append("q", query);
-    fetchURL.searchParams.append("highlight", "true");
-    if (strict === false) fetchURL.searchParams.append("iwo", "true");
+    const ws = WikiSubmission.createClient();
 
-    const request = await fetch(fetchURL);
-    const response = await request.json();
+    const results = await ws.Newsletters.query(query, {
+      highlight: true,
+      strategy: strict ? "strict" : "default",
+    });
 
-    if (response.results?.length > 0 && !response.error) {
-      logger
-        .color("green")
-        .bold()
-        .underscore()
-        .log(
-          `${response.results.length} result${
-            response.results.length > 1 ? "s" : ""
-          } for "${query}"\n`
-        );
+    if (results.data && results.data.length > 0) {
+      if (results.type === "search" && results.totalMatches) {
+        logger
+          .color("green")
+          .bold()
+          .underscore()
+          .log(
+            `${results.metadata.formattedQuery} (${results.totalMatches} result${results.totalMatches > 1 ? "s" : ""})\n`
+          );
+      } else {
+        logger
+          .color("green")
+          .bold()
+          .underscore()
+          .log(
+            `${results.data.length} result${results.data.length > 1 ? "s" : ""
+            } for "${query}"\n`
+          );
+      }
 
-      for (const sp of response.results) {
+      for (const sp of results.data) {
         logger
           .color("white")
           .log(
-            `-------\n${sp.sp_year} ${capitalizeFirstLetter(
-              sp.sp_month
-            )} (page ${sp.sp_page}): "${formatMarkdown(
-              sp.sp_content
-            )}"\n\nReference: https://www.masjidtucson.org/publications/books/sp/${
-              sp.sp_year
-            }/${sp.sp_month}/page${
-              sp.sp_page
-            }.html\nFull PDF: https://docs.wikisubmission.org/library/sp/${
-              sp.sp_year
-            }_${sp.sp_month}`
+            `-------\n${sp.year} ${capitalizeFirstLetter(
+              sp.month
+            )} (page ${sp.page}): "${formatMarkdown(
+              sp.content
+            )}"\n\nReference: https://www.masjidtucson.org/publications/books/sp/${sp.year
+            }/${sp.month}/page${sp.page
+            }.html\nFull PDF: https://library.wikisubmission.org/file/sp/${sp.year
+            }_${sp.month}`
           );
       }
-    } else if (!response.error) {
-      logger.color("yellow").bold().underscore().log(`No results\n`);
-    } else if (response.error?.name) {
-      logger.color("red").bold().underscore().log(`${response.error.name}\n`);
-      logger.color("red").log(`${response.error.description || "--"}\n`);
     } else {
-      logger.color("red").bold().log(`Invalid request\n`);
+      logger.color("yellow").bold().underscore().log(`No results\n`);
     }
   });
 

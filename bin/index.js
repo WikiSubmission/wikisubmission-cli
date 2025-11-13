@@ -16,7 +16,6 @@ const pkg = require("../package.json");
   program.addCommand(require("../command-media").default);
   program.addCommand(require("../command-newsletters").default);
   program.addCommand(require("../command-prayertimes").default);
-  program.addCommand(require("../command-library").default);
   program.showHelpAfterError();
 
   // Check for updates
