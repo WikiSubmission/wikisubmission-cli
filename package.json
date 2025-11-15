@@ -20,6 +20,6 @@
     "commander": "^12.1.0",
     "node-color-log": "^12.0.1",
     "update-notifier": "^7.3.1",
-    "wikisubmission-sdk": "^2.0.2"
+    "wikisubmission-sdk": "^2.0.3"
   }
 }
